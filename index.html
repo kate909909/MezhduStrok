@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Между строк — книжный магазин</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Mulish:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+    <a href="#home" class="logo">Между строк<span>.</span></a>
+    <nav class="navbar" id="navbar">
+        <a href="#home">Главная</a>
+        <a href="#catalog">Каталог</a>
+        <a href="#about">О нас</a>
+        <a href="#contacts">Контакты</a>
+    </nav>
+    <div class="header-right">
+        <div class="search-bar">
+            <i class="fas fa-search"></i>
+            <input type="text" id="searchInput" placeholder="Поиск книг, авторов...">
+        </div>
+        <div class="header-icons">
+            <a href="#" onclick="openAuth(event)"><i class="fas fa-user"></i></a>
+            <a href="#" onclick="openCart(event)" style="position:relative">
+                <i class="fas fa-shopping-cart"></i>
+                <span class="cart-badge" id="cartBadge">0</span>
+            </a>
+        </div>
+        <button class="burger" id="burgerBtn" onclick="toggleMenu()"><i class="fas fa-bars"></i></button>
+    </div>
+</header>
+
+<!-- HERO -->
+<section class="hero" id="home">
+    <div class="hero-content">
+        <span class="hero-badge">✦ Новинки 2025</span>
+        <h1>Книги, которые <em>меняют</em> мир</h1>
+        <p>Более 10 000 книг в нашем каталоге. Находите истории, которые останутся с вами навсегда.</p>
+        <div class="hero-btns">
+            <a href="#catalog" class="btn btn-primary"><i class="fas fa-book-open"></i> Перейти в каталог</a>
+            <a href="#about" class="btn btn-outline">О магазине</a>
+        </div>
+    </div>
+</section>
+
+<!-- BANNER -->
+<div class="banner">
+    <div class="banner-text">
+        <h3>🎉 Летняя распродажа — скидки до 40%</h3>
+        <p>На все книги из раздела «Классика» и «Бестселлеры» до 31 июля</p>
+    </div>
+    <a href="#catalog" class="btn-white">Смотреть акции →</a>
+</div>
+
+<!-- CATALOG -->
+<section id="catalog">
+    <div class="section-header">
+        <span class="section-label">Наши книги</span>
+        <h2 class="section-title">Каталог <em>книг</em></h2>
+    </div>
+    <div class="catalog-layout">
+        <!-- FILTERS -->
+        <aside class="filters">
+            <h3><i class="fas fa-sliders-h" style="margin-right:0.8rem;font-size:1.4rem"></i>Фильтры</h3>
+            <div class="filter-group">
+                <label>Жанр</label>
+                <select id="filterGenre" onchange="applyFilters()">
+                    <option value="">Все жанры</option>
+                    <option value="Роман">Роман</option>
+                    <option value="Детектив">Детектив</option>
+                    <option value="Фэнтези">Фэнтези</option>
+                    <option value="Классика">Классика</option>
+                    <option value="Психология">Психология</option>
+                    <option value="Биография">Биография</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label>Макс. цена: <span id="priceLabel">2000 ₽</span></label>
+                <input type="range" id="filterPrice" min="100" max="2000" value="2000" step="50" oninput="updatePrice(this.value)" onchange="applyFilters()">
+                <div class="price-range-labels"><span>100 ₽</span><span>2000 ₽</span></div>
+            </div>
+            <div class="filter-group">
+                <label>Сортировка</label>
+                <select id="filterSort" onchange="applyFilters()">
+                    <option value="popular">По популярности</option>
+                    <option value="price-asc">Цена: по возрастанию</option>
+                    <option value="price-desc">Цена: по убыванию</option>
+                    <option value="new">Новинки</option>
+                </select>
+            </div>
+            <button class="btn-filter" onclick="resetFilters()"><i class="fas fa-redo" style="margin-right:0.6rem"></i>Сбросить фильтры</button>
+        </aside>
+
+        <!-- BOOKS -->
+        <div class="catalog-main">
+            <div class="catalog-toolbar">
+                <span id="booksCount">Показано 8 книг</span>
+                <select class="sort-select" onchange="document.getElementById('filterSort').value=this.value;applyFilters()">
+                    <option value="popular">По популярности</option>
+                    <option value="price-asc">Цена ↑</option>
+                    <option value="price-desc">Цена ↓</option>
+                    <option value="new">Новинки</option>
+                </select>
+            </div>
+            <div class="books-grid" id="booksGrid"></div>
+            <div class="pagination" id="pagination"></div>
+        </div>
+    </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+    <div class="about-grid">
+        <div class="about-img-wrap">
+            <img src="https://i.pinimg.com/474x/fc/2e/ac/fc2eac4ae33516f0a1c037e6e28b9e65.jpg?nii=t" alt="Книжный магазин">
+            <div class="about-badge">
+                <div class="num">10</div>
+                <div class="lbl">лет с вами</div>
+            </div>
+        </div>
+        <div class="about-text">
+            <div class="section-header" style="text-align:left;margin-bottom:2rem">
+                <span class="section-label">О нас</span>
+            </div>
+            <h2>Книжный магазин, созданный с <em style="color:var(--green);font-style:italic">любовью</em></h2>
+            <p>Наш магазин «Между строк» открылся в 2016 году с одной простой идеи: в эпоху цифрового шума должно остаться место, где можно замедлиться и найти книгу своей жизни.</p>
+            <p>Мы верим, что у каждой книги есть свой читатель. Помогаем найти друг друга уже 10 лет!</p>
+            <div class="about-features">
+                <div class="feature-item">
+                    <div class="feature-icon"><i class="fas fa-book"></i></div>
+                    <div class="feature-text"><h4>Более 10 000 книг</h4><p>Широкий выбор во всех жанрах</p></div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon"><i class="fas fa-truck"></i></div>
+                    <div class="feature-text"><h4>Быстрая доставка</h4><p>По всей России от 1 дня</p></div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon"><i class="fas fa-shield-alt"></i></div>
+                    <div class="feature-text"><h4>Гарантия качества</h4><p>Возврат в течение 14 дней</p></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CONTACTS -->
+<section id="contacts">
+    <div class="section-header">
+        <span class="section-label">Свяжитесь с нами</span>
+        <h2 class="section-title">Наши <em>контакты</em></h2>
+    </div>
+    <div class="contacts-grid">
+        <div class="contact-info">
+            <h3>Мы всегда на связи</h3>
+            <div class="contact-item">
+                <div class="contact-icon"><i class="fas fa-map-marker-alt"></i></div>
+                <div><h4>Адрес</h4><p>г. Москва, ул. Книжная, д. 12</p></div>
+            </div>
+            <div class="contact-item">
+                <div class="contact-icon"><i class="fas fa-phone"></i></div>
+                <div><h4>Телефон</h4><p>+7 (800) 123-45-67</p></div>
+            </div>
+            <div class="contact-item">
+                <div class="contact-icon"><i class="fas fa-envelope"></i></div>
+                <div><h4>Email</h4><p>hello@mezhdustrok.ru</p></div>
+            </div>
+            <div class="contact-item">
+                <div class="contact-icon"><i class="fas fa-clock"></i></div>
+                <div><h4>Режим работы</h4><p>Пн–Вс: 9:00 – 21:00</p></div>
+            </div>
+        </div>
+        <div class="contact-form">
+            <h3>Написать нам</h3>
+            <div class="form-group"><label>Ваше имя</label><input type="text" placeholder="Иван Иванов"></div>
+            <div class="form-group"><label>Email</label><input type="email" placeholder="ivan@email.ru"></div>
+            <div class="form-group"><label>Сообщение</label><textarea rows="4" placeholder="Ваш вопрос..."></textarea></div>
+            <button class="btn btn-primary" style="width:100%" onclick="showToast('Сообщение отправлено! Мы ответим в ближайшее время.')">
+                <i class="fas fa-paper-plane"></i> Отправить
+            </button>
+        </div>
+    </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+    <div class="footer-grid">
+        <div class="footer-brand">
+            <a href="#home" class="logo">Между строк<span>.</span></a>
+            <p>Книжный магазин для тех, кто верит в силу слова. Открыты с 2016 года.</p>
+        </div>
+        <div class="footer-col">
+            <h4>Каталог</h4>
+            <a href="#catalog">Новинки</a>
+            <a href="#catalog">Бестселлеры</a>
+            <a href="#catalog">Классика</a>
+            <a href="#catalog">Детективы</a>
+        </div>
+        <div class="footer-col">
+            <h4>Магазин</h4>
+            <a href="#about">О нас</a>
+            <a href="#contacts">Контакты</a>
+            <a href="#">Доставка</a>
+            <a href="#">Возврат</a>
+        </div>
+        <div class="footer-col">
+            <h4>Аккаунт</h4>
+            <a href="#" onclick="openAuth(event)">Войти</a>
+            <a href="#" onclick="openAuth(event)">Регистрация</a>
+            <a href="#">Мои заказы</a>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        <p>© 2025 Между строк. Все права защищены.</p>
+        <div class="social-links">
+            <a href="#"><i class="fab fa-vk"></i></a>
+            <a href="#"><i class="fab fa-telegram"></i></a>
+            <a href="#"><i class="fab fa-instagram"></i></a>
+        </div>
+    </div>
+</footer>
+
+<!-- CART MODAL -->
+<div class="modal-overlay" id="cartModal">
+    <div class="cart-modal">
+        <div class="cart-header">
+            <h2><i class="fas fa-shopping-cart" style="margin-right:0.8rem;font-size:2rem;color:var(--green)"></i>Корзина</h2>
+            <button class="close-btn" onclick="closeCart()"><i class="fas fa-times"></i></button>
+        </div>
+        <div id="cartContent"></div>
+    </div>
+</div>
+
+<!-- ORDER MODAL -->
+<div class="order-modal-overlay" id="orderModal">
+    <div class="order-modal">
+        <h2>Оформление заказа</h2>
+        <div class="form-row">
+            <div class="form-group"><label>Имя</label><input type="text" id="orderName" placeholder="Иван"></div>
+            <div class="form-group"><label>Фамилия</label><input type="text" id="orderSurname" placeholder="Иванов"></div>
+        </div>
+        <div class="form-group"><label>Телефон</label><input type="tel" id="orderPhone" placeholder="+7 (___) ___-__-__"></div>
+        <div class="form-group"><label>Email</label><input type="email" id="orderEmail" placeholder="ivan@email.ru"></div>
+        <div class="form-group">
+            <label>Способ доставки</label>
+            <div class="delivery-options">
+                <div class="delivery-opt"><input type="radio" name="delivery" id="d1" value="courier" checked><label for="d1"><i class="fas fa-truck"></i>Курьером</label></div>
+                <div class="delivery-opt"><input type="radio" name="delivery" id="d2" value="pickup"><label for="d2"><i class="fas fa-store"></i>Самовывоз</label></div>
+                <div class="delivery-opt"><input type="radio" name="delivery" id="d3" value="post"><label for="d3"><i class="fas fa-mail-bulk"></i>Почтой</label></div>
+            </div>
+        </div>
+        <div class="form-group" id="addressGroup"><label>Адрес доставки</label><input type="text" id="orderAddress" placeholder="Город, улица, дом, квартира"></div>
+        <div class="form-modal-btns">
+            <button class="btn-cancel" onclick="closeOrder()">Назад</button>
+            <button class="btn-submit" onclick="submitOrder()"><i class="fas fa-check" style="margin-right:0.6rem"></i>Подтвердить заказ</button>
+        </div>
+    </div>
+</div>
+
+<!-- AUTH MODAL -->
+<div class="auth-modal-overlay" id="authModal">
+    <div class="auth-modal">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:2rem">
+            <div class="auth-tabs">
+                <button class="auth-tab active" onclick="switchAuthTab('login')">Войти</button>
+                <button class="auth-tab" onclick="switchAuthTab('register')">Регистрация</button>
+            </div>
+            <button class="close-btn" onclick="closeAuth()"><i class="fas fa-times"></i></button>
+        </div>
+        <!-- Login -->
+        <div class="auth-form active" id="loginForm">
+            <h2>Добро пожаловать</h2>
+            <p class="subtitle">Войдите в свой аккаунт</p>
+            <div class="form-group"><label>Email</label><input type="email" placeholder="ivan@email.ru"></div>
+            <div class="form-group"><label>Пароль</label><input type="password" placeholder="••••••••"></div>
+            <button class="btn-submit" style="width:100%;margin-top:0.5rem" onclick="loginUser()">Войти</button>
+        </div>
+        <!-- Register -->
+        <div class="auth-form" id="registerForm">
+            <h2>Создать аккаунт</h2>
+            <p class="subtitle">Зарегистрируйтесь, чтобы делать заказы</p>
+            <div class="form-row">
+                <div class="form-group"><label>Имя</label><input type="text" placeholder="Иван"></div>
+                <div class="form-group"><label>Фамилия</label><input type="text" placeholder="Иванов"></div>
+            </div>
+            <div class="form-group"><label>Email</label><input type="email" placeholder="ivan@email.ru"></div>
+            <div class="form-group"><label>Пароль</label><input type="password" placeholder="••••••••"></div>
+            <button class="btn-submit" style="width:100%;margin-top:0.5rem" onclick="registerUser()">Зарегистрироваться</button>
+        </div>
+    </div>
+</div>
+
+<!-- SUCCESS -->
+<div class="success-overlay" id="successOverlay">
+    <div class="success-box">
+        <div class="success-icon"><i class="fas fa-check-circle"></i></div>
+        <h2>Заказ оформлен!</h2>
+        <p>Спасибо за покупку. Мы свяжемся с вами в ближайшее время для подтверждения заказа.</p>
+        <button class="btn btn-primary" onclick="closeSuccess()">Отлично!</button>
+    </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+    <script src="script.js"></script>
+</body>
+</html>
